@@ -12,9 +12,12 @@ if wezterm.config_builder then
 end
 
 -- This is where you actually apply your config choices
-config.font = wezterm.font("Hack Nerd Font Mono")
+-- Ligatures: => -> !=
+-- config.font = wezterm.font("Hack Nerd Font Mono")
+config.font = wezterm.font("Maple Mono")
 config.line_height = 1.5
 config.font_size = 10
+-- config.harfbuzz_features = { "calt=1", "clig=1", "liga=1" }
 
 -- appearance
 config.use_fancy_tab_bar = false
@@ -42,12 +45,16 @@ config.keys = {
 	},
 	{ key = "z", mods = "LEADER", action = act.TogglePaneZoomState },
 	{ key = "t", mods = "LEADER", action = act.ActivateKeyTable({ name = "change_page", one_shot = true }) },
-	{ key = "\\", mods = "LEADER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
-	{ key = "-", mods = "LEADER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "|", mods = "LEADER|SHIFT", action = act.SplitPane({ direction = "Right", size = { Percent = 50 } }) },
+	{ key = "\\", mods = "LEADER", action = act.SplitPane({ direction = "Right", size = { Percent = 25 } }) },
+	{ key = "_", mods = "LEADER|SHIFT", action = act.SplitPane({ direction = "Down", size = { Percent = 50 } }) },
+	{ key = "-", mods = "LEADER", action = act.SplitPane({ direction = "Down", size = { Percent = 25 } }) },
 	{ key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
 	{ key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
 	{ key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
 	{ key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
+	-- Fix neovim+lazygit issue with SHIFT+Space combination
+	{ key = "Space", mods = "SHIFT", action = wezterm.action({ SendString = " " }) },
 }
 config.key_tables = {
 	resize_pane = {
